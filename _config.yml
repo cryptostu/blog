@@ -79,4 +79,4 @@ theme: landscape
 deploy:
   type: git
   repository: git@github.com:cryptostu/cryptostu.github.io.git
-  branch: gh-pages
+  branch: master
