@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle:
-description:
-author: John Doe
-language:
+title: Cryptocurrency Tech
+subtitle: Cryptocurrency Technologies
+description: Cryptocurrency Technologies
+author: Copernicus
+language: 
 timezone:
 
 # URL
@@ -79,4 +79,4 @@ theme: landscape
 deploy:
   type: git
   repository: git@github.com:cryptostu/cryptostu.github.io.git
-  branch: master
+  branch: gh-pages
