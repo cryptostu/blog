@@ -72,7 +72,8 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+#theme: landscape
+theme: Claudia
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
@@ -80,3 +81,6 @@ deploy:
   type: git
   repository: git@github.com:cryptostu/cryptostu.github.io.git
   branch: master
+
+
+
