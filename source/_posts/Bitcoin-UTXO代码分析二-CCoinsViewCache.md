@@ -153,14 +153,14 @@ void CCoinsViewCache::Uncache(const COutPoint &outpoint) {
         cacheCoins.erase(it);
     }
 }
-onst CTxOut &CCoinsViewCache::GetOutputFor(const CTxIn &input) const {
+const CTxOut &CCoinsViewCache::GetOutputFor(const CTxIn &input) const {
     const Coin &coin = AccessCoin(input.prevout);
     assert(!coin.IsSpent());
     return coin.GetTxOut();
 }
 ......
 ```
-以上方法是对一些简化逻辑的封装，更方面的被外部调用。
+以上方法是对一些简化逻辑的封装，更方便的被外部调用。
 
 另外`CCoinsViewCache`还会记录当前的最高块的hash，主要用来在判断当前的UTXO是在那个高度的UTXO,它对应的方法有:
 ```c++
