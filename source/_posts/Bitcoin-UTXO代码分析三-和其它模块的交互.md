@@ -46,8 +46,8 @@ bool CChainState::DisconnectTip(CValidationState& state, const CChainParams& cha
 
 ```
 在blockchain结构重新组织，当前`activeChain`发生变化时，某些block会链接上activeChain, 某些block会断掉跟activeChain的链接，内部会调用`CChainState::ConnectTip`和`CChainState::DisconnectTip`，这里会生成临时的CCoinsViewCache对象，后端连接上全局的另一个CCoinsViewCache实例`pcoinsTip`, 在调用ConnectBlock，DisconnectBlock后，更新自己的状态到`pcoinsTip`。
-## MemPool相关
-有一个对象专门用来处理MemPool相关的UTXO，对象为`CCoinsViewMemPool`:
+## Mempool相关
+有一个对象专门用来处理Mempool相关的UTXO，对象为`CCoinsViewMemPool`:
 ```c++
 
 class CCoinsViewMemPool : public CCoinsViewBacked
