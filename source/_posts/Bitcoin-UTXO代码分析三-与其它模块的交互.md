@@ -1,5 +1,5 @@
 ---
-title: 'Bitcoin UTXO代码分析(三):和其它模块的交互'
+title: 'Bitcoin UTXO代码分析(三):与其它模块的交互'
 date: 2018-02-14 06:16:54
 tags:
 ---
