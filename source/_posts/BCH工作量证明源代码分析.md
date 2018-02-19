@@ -7,7 +7,7 @@ tags:
 Bitcoin Cash 源码中，POW功能模块，主要提供两个函数，供上层进行调用：
 
 1. `GetNextWorkRequired`: 获取下个块的工作量(即难度)
-2. `CheckProofOfWork`: 检查块的工作量是否合法。 TRUE：合法； false：不合法。
+2. `CheckProofOfWork`: 检查块的工作量是否合法。 true：合法； false：不合法。
 下面是详细分析
 ## 获取下个块的难度
 ```
