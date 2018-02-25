@@ -101,7 +101,7 @@ leveldb::WriteOptions syncoptions;
 leveldb::DB *pdb;
 ```
 
-## 常量和枚举的定义
+## 其它常量和枚举的定义
 在 `chain.h` 的 CBlockFileInfo 下，有如下常量：
 ```c++
 class CBlockFileInfo {
