@@ -1,0 +1,44 @@
+# [译]BIP-130 发送消息头
+
+## 概述
+
+当添加一个新消息-“sendheaders”时，比起“inv”消息来，节点更喜欢通过 “headers” 消息来接收新块的广播。
+
+## 动机
+
+自 0.10 引入“headers-first”下载块以来，假设块不能够连接到（有效）头文件链，块将不会被处理。因此，块中继工作通常如下：
+
+1. 节点（N）用包含块 hash 的“inv”消息来广播新的提示
+2. 其他节点（P）用“getheaders”消息（请求 headers 直到有新的提示出现）和新提示本身的“getdata”消息来响应“inv”
+3. N 用一个“headers”消息（带有新 block 的 headers 以及任何前面的 headers，P 未知）和包含一个新 block 的“block”消息来响应
+
+然而，在建立提示且其中一个新的 block 被广播的情况下，对于一个新区块这通常是更加高效的，就是这个节点 N 只广播block-header而不是去广播 block-hash 以及保存其他节点生成和传输的 getheaders 消息（和所需的块定位符）。
+
+在 reorg 的情况下，其中 1 个或多个 blocks 被断开连接，节点当前只是为新提示发送“inv”。在请求这些块之前，需要等到中间块的 headers 被交付，此时其他节点可以立即请求新的提示。 通过广播 headers，其他节点可以立即请求从上一个fork点开始到块公告中的新提示出现所有中间块。
+
+## 规范
+
+1. sendheaders消息被定义为一个空的消息，其中 `pchCommand == “sendheaders”`
+2. 收到“sendheaders”消息后，将允许节点（但不是必需）通过发送新块的block-header来通知新的blocks（为了块连接，节点所认为的对等点可能需要与其他的块一起）
+3. 通过检查协议 `version >= 70012` 来启用功能发现
+
+## 附加限制
+
+由于对sendheaders的支持是可选的，所以实现这一点的软件也可以选择性地施加其他的约束，例如只在建立连接后才去遵守sendheaders消息。
+
+## 向后兼容
+
+在这种变化之后，老客户仍然完全兼容并且可以互操作。
+
+## 实现
+
+[https://github.com/bitcoin/bitcoin/pull/6494](https://github.com/bitcoin/bitcoin/pull/6494)
+
+## 引用
+
+原文链接：[sendheaders message](https://github.com/bitcoin/bips/blob/master/bip-0130.mediawiki)
+
+***
+
+本文由 `copernicus团队 冉小龙` 翻译，转载无需授权。
+
