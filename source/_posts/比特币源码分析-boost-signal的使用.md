@@ -1,6 +1,10 @@
-###  bitcoin   boost::signal  的使用
+---
+title: '比特币源码分析-boost::signal的使用'
+date: 2018-03-08 10:13:19
+tags:
+---
 
-bitcoin 代码中大量使用boost::signal， boost::signal 实现了信号与槽的事件通知机制，或者说是一种消息的发布与订阅机制， signal 类型是一个可调用类型，slot 就是callback 对象，或者说事件的订阅者，  signal 实例是一个可调用对象，调用signal 对象，就相当于发布了相应的事件,  signal  的connect， disconnect 方法 分别相当于对事件的订阅，取消。
+bitcoin 代码中大量使用 `boost::signal`, boost::signal 实现了信号与槽的事件通知机制，或者说是一种消息的发布与订阅机制， `signal` 类型是一个可调用类型，`slot` 就是callback 对象，或者说事件的订阅者，signal 实例是一个可调用对象，调用signal 对象，就相当于发布了相应的事件,  signal  的`connect`， `disconnect` 方法分别相当于对事件的订阅，取消。
 
 ```c++
 #include <boost/signals2.hpp>
@@ -44,9 +48,9 @@ int main() {
 	return 0;
 
 ```
-上面这个例子, 有五个函数订阅sig 事件， sig(5. , 3.) 的调用触发事件，参数5，3， 相当于事件携带的消息paylaod,   传给了五个事件订阅者。
+上面这个例子, 有五个函数订阅sig 事件，sig(5. , 3.) 的调用触发事件，参数5，3，相当于事件携带的消息paylaod, 传给了五个事件订阅者。
 
-bitcoin 中定义了类型CMainSignals 来统一管理各个功能模块的事件通知，CMainSignal 是一个资源管理类型， 主要工作代理给由unique_ptr 管理内存的成员 m_internals , 它的类型是MainSignalsInstance，内部定义十个boost signal 变量， 分别表达十种要通知的事件。
+bitcoin 中定义了类型`CMainSignals` 来统一管理各个功能模块的事件通知，`CMainSignal` 是一个资源管理类型， 主要工作代理给由`unique_ptr` 管理内存的成员 `m_internals` , 它的类型是`MainSignalsInstance`，内部定义十个boost signal 变量， 分别表达十种要通知的事件。
 
 
 ```c++
@@ -109,8 +113,8 @@ struct MainSignalsInstance {
 
 ```
 
-类型CValidationInterface 主要是统一表示某些对MainSignalsInstance 中定义的十个事件感兴趣的对象， 即这些事件的订阅者， 所有对这些事件感兴趣代码继承CValidationInterface类型，
-提供自己版本的这些虚成员函数的实现，覆盖baseCValidationInterface 中对应的空方法， 表达对相应的事件感兴趣， 不感兴趣的事件的回调方法继续是那些继承自base class 的空方法。
+类型`CValidationInterface` 主要是统一表示某些对`MainSignalsInstance` 中定义的十个事件感兴趣的对象， 即这些事件的订阅者， 所有对这些事件感兴趣代码继承`CValidationInterface`类型，
+提供自己版本的这些虚成员函数的实现，覆盖`baseCValidationInterface` 中对应的空方法， 表达对相应的事件感兴趣， 不感兴趣的事件的回调方法继续是那些继承自base class 的空方法。
 ```c++
 class CValidationInterface {
 protected:
@@ -140,7 +144,7 @@ protected:
 };
 
 ```
-CValidationInterface 有四个子类， CWallet , CZMQNotificationInterface,   submitblock_StateCatcher,  PeerLogicValidation 分别对应四个对MainSignalsInstance 中的事件感兴趣的订阅者。
+CValidationInterface 有四个子类， CWallet , CZMQNotificationInterface,   submitblock_StateCatcher,  PeerLogicValidation 分别对应四个对`MainSignalsInstance` 中的事件感兴趣的订阅者。
 
 ```c++
 class CWallet final : public CCryptoKeyStore, public CValidationInterface
@@ -209,7 +213,7 @@ public:
 
 ```
 
-这四个订阅者通过调用RegisterValidationInterface， UnregisterValidationInterface 订阅，取消事件通知， 函数接受参数是指向订阅者的指针。
+这四个订阅者通过调用`RegisterValidationInterface`， `UnregisterValidationInterface` 订阅，取消事件通知，函数接受参数是指向订阅者的指针。
 
 ```c++
 void RegisterValidationInterface(CValidationInterface* pwalletIn) {
@@ -249,7 +253,7 @@ bool AppInitMain()
      .................
 }
 ```
-调用RegisterBackgroundSignalScheduler(), 初始化全局MainSignalsInstance 实例; 调用RegisterWithMempoolSignals(), 订阅全局内存池对象的NotifyEntryRemoved 事件通知,  MainSignalsInstance  只对由于超时，大小限制， blockchian 重组，替换等原因发生的离开内存池事件感兴趣， 收到后MainSignalsInstance 再作为事件发布者， 转发给其他订阅者， 如CWallet。
+调用RegisterBackgroundSignalScheduler(), 初始化全局MainSignalsInstance 实例; 调用RegisterWithMempoolSignals(), 订阅全局内存池对象的NotifyEntryRemoved 事件通知,  MainSignalsInstance 只对由于超时，大小限制， blockchian 重组，替换等原因发生的离开内存池事件感兴趣， 收到后MainSignalsInstance 再作为事件发布者， 转发给其他订阅者， 如CWallet。
 
 ```c++
 bool AppInitMain()
@@ -260,7 +264,7 @@ bool AppInitMain()
     ........
  }
 ```
-初始化全局的连接管理对象connman 后， 初始化全局的peerLogic 对象， 然后调用RegisterValidationInterface(), peerLogic 成为MainSignalsInstance 对象的订阅者,  如果用户编译了zeromq支持 模块，调用RegisterValidationInterface(),  pzmqNotificationInterface 订阅MainSignalsInstance 。
+初始化全局的连接管理对象connman 后， 初始化全局的peerLogic 对象， 然后调用RegisterValidationInterface(), peerLogic 成为MainSignalsInstance 对象的订阅者,  如果用户编译了`zeromq`支持模块，调用RegisterValidationInterface(),  pzmqNotificationInterface 订阅MainSignalsInstance 。
 ```c++
 bool AppInitMain()
 {
@@ -324,8 +328,8 @@ CWallet* CWallet::CreateWalletFromFile(const std::string walletFile)
         ......
 }    
 ```
-在submitblock rpc 调用中， 用户提交hex编码的原始block， 解析后， 调用ProcessNewBlock()检查处理，使用类型submitblock_StateCatcher 的对象sc 作为MainSignalsInstance 的订阅者，
-对提交过去的block 的验证结果， 作为事件通知返回给rpc 调用。
+在`submitblock rpc `调用中， 用户提交hex编码的原始block， 解析后， 调用ProcessNewBlock()检查处理，使用类型`submitblock_StateCatcher` 的对象sc 作为MainSignalsInstance 的订阅者，
+对提交过去的block 的验证结果，作为事件通知返回给rpc 调用。
 ```c++
 UniValue submitblock(const JSONRPCRequest& request)
 {
@@ -340,7 +344,7 @@ UniValue submitblock(const JSONRPCRequest& request)
 }
 ```
 
-CMainSignals 类型上面定义了一堆触发事件的方法, 别的代码模块调用这些方法， 触发相应的事件，把事件通知发给相关的订阅者。
+`CMainSignals` 类型上面定义了一堆触发事件的方法, 别的代码模块调用这些方法， 触发相应的事件，把事件通知发给相关的订阅者。
 ```c++
 void CMainSignals::UpdatedBlockTip(const CBlockIndex *pindexNew, const CBlockIndex *pindexFork, bool fInitialDownload) {
     m_internals->m_schedulerClient.AddToProcessQueue([pindexNew, pindexFork, fInitialDownload, this] {
@@ -390,7 +394,7 @@ void CMainSignals::NewPoWValidBlock(const CBlockIndex *pindex, const std::shared
     m_internals->NewPoWValidBlock(pindex, block);
 }
 ```
-CChainState 的ActivateBestChain 方法里， 发布BlockConnected， UpdatedBlockTip 事件:
+CChainState 的`ActivateBestChain`方法里， 发布BlockConnected， UpdatedBlockTip 事件:
 
 ```c++
 bool CChainState::ActivateBestChain(CValidationState &state, const CChainParams& chainparams, std::shared_ptr<const CBlock> pblock) {
@@ -407,7 +411,7 @@ bool CChainState::ActivateBestChain(CValidationState &state, const CChainParams&
 ```
 
 
-CChainState 的AcceptBlock 方法里，  发布NewPoWValidBlock 事件:
+CChainState 的AcceptBlock 方法里，发布NewPoWValidBlock 事件:
 
 ```c++
 bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CValidationState& state, const CChainParams& chainparams, CBlockIndex** ppindex, bool fRequested, const CDiskBlockPos* dbp, bool* fNewBlock)
@@ -420,7 +424,7 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CVali
         ......................
 }
 ```
-CChainState 的DisconnectTip 方法里，发布 BlockDisconnected 事件:
+CChainState 的DisconnectTip 方法里，发布 `BlockDisconnected` 事件:
 ```c++
 bool CChainState::DisconnectTip(CValidationState& state, const CChainParams& chainparams, DisconnectedBlockTransactions *disconnectpool)
 {
@@ -429,7 +433,7 @@ bool CChainState::DisconnectTip(CValidationState& state, const CChainParams& cha
      ..............
 }
 ```
-CChainState 的ConnectTip 方法里，发布 BlockChecked 事件:
+CChainState 的ConnectTip 方法里，发布 `BlockChecked` 事件:
 ```c++
 bool CChainState::ConnectTip(CValidationState& state, const CChainParams& chainparams, CBlockIndex* pindexNew, const std::shared_ptr<const CBlock>& pblock, ConnectTrace& connectTrace, DisconnectedBlockTransactions &disconnectpool)
 {
@@ -442,7 +446,7 @@ bool CChainState::ConnectTip(CValidationState& state, const CChainParams& chainp
      ................
 }
 ```
-PeerLogicValidation 的 SendMessage 方法里， 发布Broadcast 事件, 通知钱包重新发送未确认的交易:
+PeerLogicValidation 的 `SendMessage` 方法里， 发布Broadcast事件, 通知钱包重新发送未确认的交易:
 ```c++
 bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptMsgProc)
 {
@@ -454,7 +458,7 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
     .............
 }
 ```
-从网络上收到 INV  消息后， 通知给钱包，更新内部状态。
+从网络上收到`INV`消息后，通知给钱包，更新内部状态。
 ```c++
 bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStream& vRecv, int64_t nTimeReceived, const CChainParams& chainparams, CConnman* connman, const std::atomic<bool>& interruptMsgProc)
 {
@@ -468,7 +472,7 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
             ................
 }
 ```
-validation.cpp 里面的 ProcessNewBlock在内部调用 CheckBlock 后， 检查失败后， 发布 BlockCheck s事件， 通告给相关订阅者。
+`validation.cpp` 里面的 `ProcessNewBlock`在内部调用 CheckBlock 后，检查失败后，发布 BlockCheck s事件， 通告给相关订阅者。
 ```c++
 bool ProcessNewBlock(const CChainParams& chainparams, const std::shared_ptr<const CBlock> pblock, bool fForceProcessing, bool *fNewBlock)
 {
@@ -482,7 +486,7 @@ bool ProcessNewBlock(const CChainParams& chainparams, const std::shared_ptr<cons
 
 }
 ```
-FlushStateToDisk, 发布SetBestChain 事件， 通知钱包
+`FlushStateToDisk`, 发布`SetBestChain` 事件， 通知钱包
 ```c++
 bool static FlushStateToDisk(const CChainParams& chainparams, CValidationState &state, FlushStateMode mode, int nManualPruneHeight) {
      ...............
@@ -494,7 +498,7 @@ bool static FlushStateToDisk(const CChainParams& chainparams, CValidationState &
      ...............
 }
 ```
-validation.cpp 里面的AcceptToMemoryPoolWorker, 在结束前， 发布TransactionAddedToMempool 事件。
+`validation.cpp` 里面的`AcceptToMemoryPoolWorker`, 在结束前， 发布`TransactionAddedToMempool` 事件。
 ```c++
 static bool AcceptToMemoryPoolWorker(const CChainParams& chainparams, CTxMemPool& pool, CValidationState& state, const CTransactionRef& ptx,
                               bool* pfMissingInputs, int64_t nAcceptTime, std::list<CTransactionRef>* plTxnReplaced,
@@ -505,3 +509,7 @@ static bool AcceptToMemoryPoolWorker(const CChainParams& chainparams, CTxMemPool
 
 }
 ```
+
+
+***
+本文由 `Copernicus团队` 喻建写作，转载无需授权
