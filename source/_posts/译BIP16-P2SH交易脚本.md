@@ -1,5 +1,6 @@
 ---
-title: '译-BIP16 P2SH交易脚本'
+title: '译BIP16:P2SH交易脚本'
+date: 2018-03-11 09:03:55
 tags:
 ---
 
