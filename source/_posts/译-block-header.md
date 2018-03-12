@@ -1,9 +1,14 @@
+---
+title: 译 block header
+date: 2018-03-12 21:07:06
+tags:
+---
 _block headers 以80字节的格式进行序列化，然后作为比特币工作量验证算法的一部分进行哈希处理，使序列化头部格式成为共识规则的一部分。_
-
+()
 | bytes|      name   |  数据类型 |描述|
 | ---- | ----------- |--------- |---|
 |  4   |     version   | int32_t  | block version 指示要遵循哪一组块验证规则|
-|  32   |   previous block header hash  | char[32] |SHA256（SHA256（））hash，以前面 block 的 header 的内部字节顺序排列。这确保在不改变该块的头部的情况下不能改变先前的块。|
+|  32   |   previous block header hash  | char[32] |SHA256（SHA256()）hash，以前面 block 的 header 的内部字节顺序排列。这确保在不改变该块的头部的情况下不能改变先前的块。|
 |  32   |     merkle root hash   | char[32]   |SHA256（SHA256()）是按照内部字节排序的hash。 merkle root 源自该块中包含的所有交易的hash值，确保在不修改头部的情况下不会修改这些交易。|
 |  4   |   time  | uint32_t |块时间是矿工开始散列头部时的Unix纪元时间（根据矿工）。 必须严格大于前11个block的平均时间。 根据其时钟，全节点将不会接受超过两个小时的headers。|
 |  4   |     nBits    | uint32_t  | 此块的header hash 的目标阈值的编码版本必须小于或等于。|
