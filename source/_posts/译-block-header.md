@@ -3,16 +3,16 @@ title: 译 block header
 date: 2018-03-12 21:07:06
 tags:
 ---
-_block headers 以80字节的格式进行序列化，然后作为比特币工作量验证算法的一部分进行哈希处理，使序列化头部格式成为共识规则的一部分。_
+_block headers 以 80 字节的格式进行序列化，然后作为比特币工作量验证算法的一部分进行哈希处理，使序列化头部格式成为共识规则的一部分。_
 
 | bytes|      name   |  数据类型 |描述|
 | ---- | ----------- |--------- |---|
 |  4   |     version   | int32_t  | block version 指示要遵循哪一组块验证规则|
-|  32   |   previous block header hash  | char[32] |SHA256（SHA256()）hash，以前面 block 的 header 的内部字节顺序排列。这确保在不改变该块的头部的情况下不能改变先前的块。|
-|  32   |     merkle root hash   | char[32]   |SHA256（SHA256()）是按照内部字节排序的hash。 merkle root 源自该块中包含的所有交易的hash值，确保在不修改头部的情况下不会修改这些交易。|
-|  4   |   time  | uint32_t |块时间是矿工开始散列头部时的Unix纪元时间（根据矿工）。 必须严格大于前11个block的平均时间。 根据其时钟，全节点将不会接受超过两个小时的headers。|
-|  4   |     nBits    | uint32_t  | 此块的header hash 的目标阈值的编码版本必须小于或等于。|
-|  4   |   nonce  | uint32_t |任意数量的矿工都可以修改头部 hash 来确保能够产生小于或等于目标阈值的hash。 如果所有32位值都经过测试，则可以更新时间或更改coinbase交易并更新merkle根。|
+|  32   |   previous block header hash  | char[32] |SHA256(SHA256()) hash，以前面 block 的 header 的内部字节顺序排列。这确保在不改变该块的头部的情况下不能改变先前的块。|
+|  32   |     merkle root hash   | char[32]   |SHA256(SHA256()) 是按照内部字节排序的hash。 merkle root 源自该块中包含的所有交易的hash值，确保在不修改头部的情况下不会修改这些交易。|
+|  4   |   time  | uint32_t |块时间是矿工开始散列头部时的 Unix 纪元时间（根据矿工）。 必须严格大于前 11 个 block 的平均时间。 根据其时钟，全节点将不会接受超过两个小时的 headers。|
+|  4   |     nBits    | uint32_t  | 此块的 header hash 的目标阈值的编码版本必须小于或等于。|
+|  4   |   nonce  | uint32_t |任意数量的矿工都可以修改头部 hash 来确保能够产生小于或等于目标阈值的hash。 如果所有32位值都经过测试，则可以更新时间或更改 coinbase 交易并更新 merkle 根。|
 
 **哈希按内部字节顺序排列; 其他值都是小端顺序。**
 
@@ -34,24 +34,24 @@ fe9f0864 ........................... Nonce
 ## Block Versions
 
 * Version 1：在创世区块中被引入(January 2009)
-* Version 2：在Bitcoin Core 0.7.0（2012年9月）中通过软分叉被引入。如BIP34所述，有效的 version2 block 需要 [block height parameter in the coinbase](https://bitcoin.org/en/developer-reference#term-coinbase-block-height "The current block's height encoded into the first bytes of the coinbase field")。 在BIP34中还描述了拒绝某些块的规则; 根据这些规则，Bitcoin Core 0.7.0及更高版本在 block height 为224,412 处开始拒绝在 coinbase 中没有 version2 的 block height，并在块高度为 227,930 的三周后开始拒绝新生成的 version1 的块。
-* version3：在Bitcoin Core 0.10.0（2015年2月）中通过软分叉被引入。当 fork 达到全面执行（2015年7月）时，它需要严格按照 BIP66 中所描述的对新块中的所有ECDSA签名进行DER编码。 自从Bitcoin Core 0.8.0（2012年2月）以来，不使用严格DER编码的交易是非标准的。
+* Version 2：在Bitcoin Core 0.7.0 (2012年9月) 中通过软分叉被引入。如BIP34所述，有效的 version2 block 需要 [block height parameter in the coinbase](https://bitcoin.org/en/developer-reference#term-coinbase-block-height "The current block's height encoded into the first bytes of the coinbase field")。 在BIP34中还描述了拒绝某些块的规则; 根据这些规则，Bitcoin Core 0.7.0及更高版本在 block height 为224,412 处开始拒绝在 coinbase 中没有 version2 的 block height，并在块高度为 227,930 的三周后开始拒绝新生成的 version1 的块。
+* version3：在Bitcoin Core 0.10.0 (2015年2月) 中通过软分叉被引入。当 fork 达到全面执行（2015年7月）时，它需要严格按照 BIP66 中所描述的对新块中的所有ECDSA签名进行DER编码。 自从Bitcoin Core 0.8.0（2012年2月）以来，不使用严格DER编码的交易是非标准的。
 * version4：在 BIP65 中指定并在 Bitcoin Core 0.11.2（2015年11月）中引入的区块，通过软分叉开始启动（2015年12月）。这些块现在支持该BIP中描述的新`OP_CHECKLOCKTIMEVERIFY`操作码。
 
-用于 version2、3和4 升级的机制通常称为IsSuperMajority()，该功能添加到Bitcoin Core 中以管理这些软分支更改。有关此方法的完整说明，请参阅[BIP34](https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki)。
+用于 version2、3 和 4 升级的机制通常称为 IsSuperMajority()，该功能添加到 Bitcoin Core 中以管理这些软分支更改。有关此方法的完整说明，请参阅[BIP34](https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki)。
 
 ### Merkle Trees
 
 merkle root 是使用此块中所有交易的TXID构建的，但首先需要按照共识规则的要求排列TXID：
 
 * coinbase 交易的 TXID 总是排在第一位。
-* 此块中的任何输入都可以使用同时出现在此块中的输出（假设花费是有效的）。但是，对应于输出的TXID必须放置在与输入对应的TXID之前的某个点。 这可以确保整个区块链的交易在输入之前都有与之对应的输出。
+* 此块中的任何输入都可以使用同时出现在此块中的输出（假设花费是有效的）。但是，对应于输出的 TXID 必须放置在与输入对应的TXID之前的某个点。 这可以确保整个区块链的交易在输入之前都有与之对应的输出。
 
 如果一个块只有一个 coinbase 交易，coinbase TXID将会被用作merkle root 的hash。
 
-如果一个块只有一个coinbase交易和一个其他交易，那么这两个交易的TXID按顺序排列，连接成64个原始字节，然后SHA256（SHA256()）hash在一起最终形成 merkle root。
+如果一个块只有一个 coinbase 交易和一个其他交易，那么这两个交易的TXID按顺序排列，连接成64个原始字节，然后 SHA256(SHA256()) hash在一起最终形成 merkle root。
 
-如果一个块有三个或更多的交易，则会形成中间的Merkle树行。 TXID按顺序排列并配对，从coinbase交易的TXID开始。 每个对连接在一起作为64个原始字节和SHA256（SHA256()）hash形成第二行hash。 如果有一个奇数（非偶数）的TXID，则将最后一个TXID与其自身的副本连接并进行hash。 如果第二行中有两个以上的hash，则重复该过程以创建第三行（并且，如有必要，可以进一步重复以创建附加行）。 一旦获得一行只有两个hash值，这些hash值被连接并哈希来产生merkle root。
+如果一个块有三个或更多的交易，则会形成中间的Merkle树行。 TXID按顺序排列并配对，从coinbase交易的TXID开始。 每个对连接在一起作为64个原始字节和 SHA256(SHA256()) hash 形成第二行 hash。 如果有一个奇数（非偶数）的TXID，则将最后一个TXID与其自身的副本连接并进行hash。 如果第二行中有两个以上的hash，则重复该过程以创建第三行（并且，如有必要，可以进一步重复以创建附加行）。 一旦获得一行只有两个hash值，这些hash值被连接并哈希来产生merkle root。
 
 上面逻辑有点绕，我们通过一张图来直观感受一下：
 ![merlke.png](https://upload-images.jianshu.io/upload_images/6967649-a51882dd398c737c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
