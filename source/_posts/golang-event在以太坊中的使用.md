@@ -1,12 +1,10 @@
-﻿
-# golang-event
-
-
-
-##     ethereum  event  库的使用
-
- github.com/ethereum/go-ethereum/event 包 实现了一个事件发布订阅的库,
- 使用接口主要是event.Feed 类型， 以前还有event.TypeMux 类型，看代码注释，说过时， 目前主要使用Feed 类型.
+---
+title: golang-event在以太坊中的使用
+date: 2018-03-15 21:34:10
+tags:
+---
+## go-ethereum中go-event库的使用
+[github.com/ethereum/go-ethereum/event](github.com/ethereum/go-ethereum/event)包实现了一个事件发布订阅的库,使用接口主要是event.Feed 类型，以前还有event.TypeMux 类型，看代码注释，说过时了，目前主要使用Feed 类型。
  
 ```golang
 package main
@@ -45,16 +43,15 @@ func main() {
 	wg.Wait()
 }
 ```
-通过调用event.Feed 类型的Subscrible方法订阅事件通知， 需要使用者提前指定接收事件的channel， Subscribe返回Subscription 对象， 是一个接口类型:
+通过调用event.Feed 类型的`Subscrible`方法订阅事件通知，需要使用者提前指定接收事件的channel，Subscribe返回Subscription对象，是一个接口类型:
 ```golang
 type Subscription interface {
             Err() <-chan error      // returns the error channel
             Unsubscribe()           // cancels sending of events, closing the error channel
 }
 ```
-Err() 返回获取error 的channel， 调用Unsubscribe()取消事件订阅。
-事件的发布者调用 Send() 方法， 发送事件。
-可以使用同一个channel实例，多次调用Feed 的Subscrible 方法:
+`Err()` 返回获取error 的channel，调用`Unsubscribe()`取消事件订阅。事件的发布者调用 `Send()` 方法，发送事件。
+可以使用同一个channel实例，多次调用Feed 的`Subscrible()`方法:
 ```golang
 package main
 
@@ -108,9 +105,8 @@ func main() {
 	recv.Wait()
 }
 ```
-这个例子中， 有三个订阅者， 有三个发送者， 每个发送者发送三次1， 同一个channel ch 里面被推送了九个1.
-
-ethereum event 库还提供了一些高级别的方便接口， 比如event.NewSubscription函数，接收一个函数类型，作为数据的生产者， producer本身在后台一个单独的goroutine内执行， 后台goroutine往用户的channel 发送数据:
+这个例子中， 有三个订阅者， 有三个发送者， 每个发送者发送三次1， 同一个channel ch 里面被推送了9个1.
+ethereum event 库还提供了一些高级别的方便接口， 比如`event.NewSubscription`函数，接收一个函数类型，作为数据的生产者， producer本身在后台一个单独的goroutine内执行， 后台goroutine往用户的channel 发送数据:
 ```golang
 package main
 
@@ -251,3 +247,5 @@ func main() {
 ```
 SubscriptionScope的Close() 方法接收Track方法的返回值 ， Track 方法负责追踪订阅者。
 
+***
+本文由 `Copernicus团队 喻建`写作，转载无需授权。
