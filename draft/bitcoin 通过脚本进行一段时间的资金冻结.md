@@ -13,10 +13,8 @@ bool EvalScript(...){
     ...
     
     case OP_CHECKLOCKTIMEVERIFY: {
-        //如果脚本的检测标识 没有启用该时间锁功能；
         if (!(flags & SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY)) {
             // not enabled; treat as a NOP2  
-            // 脚本检测标识是否也禁用该 操作码；如果是，退出报错
             if (flags &
                 SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS) {
                 return set_error(
@@ -25,17 +23,14 @@ bool EvalScript(...){
             }
             break;
         }
-        //此时栈中应至少含有1项，锁定时间
         if (stack.size() < 1) {
             return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
         }
-        //将栈顶项(锁定时间)转换为可比较的 类型
+        
         const CScriptNum nLockTime(stacktop(-1), fRequireMinimal, 5);
-        //当锁定时间小于0时，退出报错
         if (nLockTime < 0) {
             return set_error(serror, SCRIPT_ERR_NEGATIVE_LOCKTIME);
         }
-        //检测该锁定时间是否合理
         if (!checker.CheckLockTime(nLockTime)) {
             return set_error(serror, SCRIPT_ERR_UNSATISFIED_LOCKTIME);
         }
@@ -47,28 +42,25 @@ bool EvalScript(...){
 
 上述为脚本中包含OP_CHECKLOCKTIMEVERIFY 操作码时，执行的验证过程。
 
-    * 分别检测该功能是否启用；
-    * 此时栈上的数据量，因为此时栈中应至少含有脚本的锁定时间。
+    * 查看时间检测功能是否启用；如果未启用，接着查看客户端是否允许启用OP_NOPn 操作码，禁止的情况下，直接报错；否则执行OP_NOPn 原始操作，即无操作，跳出。
+    * 此时执行时间的检查：此时栈上的数据量，因为此时栈中应至少含有脚本的锁定时间。
+    * 将栈顶的时间数据转换为可比较类型；
     * 进行锁定时间的检测
     
 ### 时间的检测
 ```
 bool TransactionSignatureChecker::CheckLockTime(const CScriptNum &nLockTime) const {
-    // 此处为检测脚本的锁定时间应该与交易自身的时间戳在同一时间段(高度，或者时间)； 
     if (!((txTo->nLockTime < LOCKTIME_THRESHOLD && nLockTime < LOCKTIME_THRESHOLD) ||
           (txTo->nLockTime >= LOCKTIME_THRESHOLD && nLockTime >= LOCKTIME_THRESHOLD))) {
         return false;
     }
-    //当 脚本锁定时间大于交易时间时，标识该笔资金现在还处于冻结状态，不允许花费
     if (nLockTime > int64_t(txTo->nLockTime)) {
         return false;
     }
-    //当该交易的nSequence字段为等于SEQUENCE_FINAL该值，该交易输入会被视为成熟，允许立即打包。这样就相当于绕过了脚本的时间锁定，不允许这样操做。
-    //此处只检测指定的交易输入而不是所有的交易输入，是希望最大限度的减少数据量。
     if (CTxIn::SEQUENCE_FINAL == txTo->vin[nIn].nSequence) {
         return false;
     }
-    //检测通过，该笔资金现在可以解冻。    
+
     return true;
 }
 ```
@@ -84,7 +76,6 @@ bool TransactionSignatureChecker::CheckLockTime(const CScriptNum &nLockTime) con
 ## 操作码的描述
 
 OP_CHECKLOCKTIMEVERIFY : 如果栈顶项大于交易的时间戳字段，标识该交易无效，否则脚本继续执行。在以下几种情况时，同样标识脚本无效：
-
     * 栈为空；
     * 栈顶项为负数；
     * 栈顶项大于等于LOCKTIME_THRESHOLD(500000000)；而交易的时间戳小于LOCKTIME_THRESHOLD； 反之也无效。
