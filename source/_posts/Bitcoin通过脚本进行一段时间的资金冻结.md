@@ -1,4 +1,8 @@
-# bitcoin 通过脚本进行一段时间的资金冻结
+---
+title: Bitcoin通过脚本进行一段时间的资金冻结
+date: 2018-03-15 11:33:38
+tags:
+---
 
 ## 该脚本的格式
 * 锁定脚本: < expiry time > OP_CHECKLOCKTIMEVERIFY OP_DROP OP_DUP OP_HASH160 < pubKeyHash > OP_EQUALVERIFY OP_CHECKSIG
