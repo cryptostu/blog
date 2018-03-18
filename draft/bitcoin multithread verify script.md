@@ -122,14 +122,23 @@ bool CCheckQueue::Loop(bool fMaster = false){
 }
 ```
 `boost::mutex mutex;`: 互斥锁保护内部的状态
+
 `boost::condition_variable condWorker;`: 在没有工作时，工作线程阻塞条件变量。
+
 `boost::condition_variable condMaster;`: 在没有工作时，master线程阻塞条件变量。
+
 `std::vector<T> queue;`: 要处理元素的队列。
+
 `int nIdle;`: 空闲的工作线程数量(包含主线程)
+
 `int nTotal;`: 总的工作线程的数量，包含主线程
+
 `bool fAllOk;`: 临时评估结果
+
 `unsigned int nTodo;`: 还有多少验证任务没有完成。包括不再排队，但仍在工作线程自己的批次中的任务数量。
+
 `bool fQuit;`: 是否需要退出。
+
 `unsigned int nBatchSize;`: 每个批次最大的元素处理数量
     
 模板类，执行的验证任务由T标识，T都必须提供一个重载的operator()方法，并且反回一个bool。
