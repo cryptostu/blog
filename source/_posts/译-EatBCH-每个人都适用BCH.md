@@ -1,3 +1,9 @@
+---
+title: '[译]EatBCH-每个人都适用BCH'
+date: 2018-03-21 15:29:31
+tags: Bitcoin Cash
+---
+
 ![EatBCH](https://upload-images.jianshu.io/upload_images/22188-f486156a0cbb6f0d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 如今，委内瑞拉的法币几乎一文不值，而且它的现金危机只会越来越糟糕。
