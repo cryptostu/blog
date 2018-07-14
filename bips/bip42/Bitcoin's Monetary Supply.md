@@ -1,4 +1,4 @@
-# Bitcoin's Monetary Supply (BIP42)
+# 比特币的货币总量 (BIP42)
 
 Long Wen  
 
@@ -273,3 +273,5 @@ V神的第二个评论则直指Bitcoin社区一直信奉的Code-is-law或者Code
 
 
 本文由 Copernicus团队 `温隆` 写作，转载无需授权。
+
+
