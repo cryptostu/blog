@@ -253,6 +253,23 @@ V神的第二个评论则直指Bitcoin社区一直信奉的Code-is-law或者Code
 
 > Sure; I agree it was a flaw in the implementation. I was more making a reductio-ad-absurdum against people who literally think that the C++ implementation in bitcoin core is the protocol specification (they do exist).
 
+## 引用
+
+[https://github.com/bitcoin/bips/blob/master/bip-0042.mediawiki](https://github.com/bitcoin/bips/blob/master/bip-0042.mediawiki)
+
+[pull#3842](https://github.com/bitcoin/bitcoin/pull/3842)
+
+[CVE-2010-5139](https://en.bitcoin.it/wiki/Common_Vulnerabilities_and_Exposures#CVE-2010-5139)
+
+[In case you missed it two years ago, BIP 42 is hilarious and addressed a real problem](https://www.reddit.com/r/btc/comments/4r878s/in_case_you_missed_it_two_years_ago_bip_42_is/)
+
+[Pieter Wuille的Twitter](https://twitter.com/pwuille/status/980598317242552320)
+
+## 代码
+
+[max_money.py](https://github.com/cryptostu/blog/blob/master/bips/bip42/max_money.py)
+
+[test_get_block_subsidy.cpp](https://github.com/cryptostu/blog/blob/master/bips/bip42/test_get_block_subsidy.cpp)
 
 
 本文由 Copernicus团队 `温隆` 写作，转载无需授权。
